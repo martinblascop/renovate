@@ -23,6 +23,7 @@ export const EksAddonsFilterSchema = z.object({
   default: z.oboolean().or(stringIsBoolSchema),
   region: z.string().optional(),
   profile: z.string().optional(),
+  roleArn: z.string().optional(),
 });
 
 export type EksAddonsFilter = z.infer<typeof EksAddonsFilterSchema>;

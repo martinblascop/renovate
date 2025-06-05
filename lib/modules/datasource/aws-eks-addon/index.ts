@@ -70,12 +70,20 @@ export class AwsEKSAddonDataSource extends Datasource {
     };
   }
 
-  private getClient({ region, profile }: EksAddonsFilter): EKSClient {
-    const cacheKey = `${region ?? 'default'}#${profile ?? 'default'}`;
-    if (!(cacheKey in this.clients)) {
+  private getClient({ region, profile, roleArn }: EksAddonsFilter): EKSClient {
+    const cacheKey = `${region ?? 'default'}#${profile ?? 'default'}#${roleArn ?? null}`;
+    if (cacheKey in this.clients) {
+      return this.clients[cacheKey];
+    }
+    if (roleArn) {
       this.clients[cacheKey] = new EKSClient({
         ...(region && { region }),
-        credentials: fromNodeProviderChain(profile ? { profile } : undefined),
+        credentials: fromTokenFile({ roleArn }),
+      });
+    } else {
+      this.clients[cacheKey] = new EKSClient({
+          ...(region && { region }),
+          credentials: fromNodeProviderChain(profile ? { profile } : undefined),
       });
     }
     return this.clients[cacheKey];

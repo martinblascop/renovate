@@ -13,6 +13,7 @@ describe('modules/datasource/aws-eks-addon/schema', () => {
       ${{ addonName: 'kube-proxy', default: false }}                | ${true}
       ${{ addonName: 'aws-cloudwatch-controller', default: false }} | ${true}
       ${{ addonName: 'aws-cloudwatch-controller', profile: 'abc' }} | ${true}
+      ${{ addonName: 'aws-cloudwatch-controller', roleArn: 'arn' }} | ${true}
       ${{ kubernetesVersion: '1.30', addonName: 'vpc-cni' }}        | ${true}
       ${{ addonName: 'vpc-cni' }}                                   | ${true}
     `('safeParse("$input") === $expected', ({ input, expected }) => {
